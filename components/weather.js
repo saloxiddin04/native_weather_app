@@ -1,5 +1,15 @@
 import React, {useState} from 'react';
-import {Text, StyleSheet, StatusBar, View, TextInput, Button} from "react-native";
+import {
+  Text,
+  StyleSheet,
+  StatusBar,
+  View,
+  TextInput,
+  Button,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  Platform
+} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 
@@ -71,39 +81,47 @@ export default function Weather({name, temp, condition, setWeather}) {
   const [query, setQuery] = useState('')
   
   return (
-    <LinearGradient
-      colors={weatherOptions[condition].gradient}
-      style={styles.mainContainer}
-    >
-      <StatusBar barStyle={'light-content'} style={'light'} animated={true}/>
-      <View style={styles.container}>
-        <MaterialCommunityIcons
-          name={weatherOptions[condition].iconName}
-          size={96}
-          color={'white'}
-        />
-        <View style={styles.flex}>
-          <Text style={styles.temp}>{temp}°C </Text>
-          <Text style={styles.temp}>| {name} </Text>
-        </View>
-        <Text style={styles.temp}>{condition}</Text>
-      </View>
-      <View
-        style={{...styles.container, ...styles.textContainer}}
+    <View style={{flex: 1}}>
+      <LinearGradient
+        colors={weatherOptions[condition].gradient}
+        style={styles.mainContainer}
       >
-        <Text style={styles.title}>{weatherOptions[condition].title}</Text>
-        <Text style={styles.description}>{weatherOptions[condition].description}</Text>
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder={'City'}
-            style={styles.input}
-            value={query}
-            onChangeText={text => setQuery(text)}
+        <StatusBar barStyle={'light-content'} style={'light'} animated={true}/>
+        <View style={styles.container}>
+          <MaterialCommunityIcons
+            name={weatherOptions[condition].iconName}
+            size={96}
+            color={'white'}
           />
-          <Button title={'Search'} style={styles.btn} onPress={() => setWeather(query)} />
+          <View style={styles.flex}>
+            <Text style={styles.temp}>{temp}°C </Text>
+            <Text style={styles.temp}>| {name} </Text>
+          </View>
+          <Text style={styles.temp}>{condition}</Text>
         </View>
-      </View>
-    </LinearGradient>
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={60}
+        >
+          <View
+            style={{...styles.container, ...styles.textContainer}}
+          >
+            <Text style={styles.title}>{weatherOptions[condition].title}</Text>
+            <Text style={styles.description}>{weatherOptions[condition].description}</Text>
+            <View style={styles.searchContainer}>
+              <TextInput
+                placeholder={'City'}
+                style={styles.input}
+                value={query}
+                onChangeText={text => setQuery(text)}
+              />
+              <Button title={'Search'} style={styles.btn} onPress={() => setWeather(query)}/>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </LinearGradient>
+    </View>
   );
 }
 

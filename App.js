@@ -13,16 +13,26 @@ export default function App() {
   const [location, setLocation] = useState(null)
   
   const getWeather = async (lat, long) => {
-    const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`)
-    setLocation(data)
-    setLoader(false)
+    try {
+      const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`)
+      setLocation(data)
+      setLoader(false)
+    } catch (e) {
+      setLoader(false)
+      Alert.alert("Something went error :(")
+    }
   }
   
   const setWeather = async (query) => {
-    setLoader(true)
-    const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${API_KEY}&units=metric`)
-    setLocation(data)
-    setLoader(false)
+    try {
+      setLoader(true)
+      const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${API_KEY}&units=metric`)
+      setLocation(data)
+      setLoader(false)
+    } catch (e) {
+      setLoader(false)
+      Alert.alert("Something went error :(")
+    }
   }
   
   const getLocation = async () => {
